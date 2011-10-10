@@ -1,45 +1,68 @@
-= Follow stuff for Mongoid
+= Follow stuff for Rails3 with Mongoid
 
 == Installation
 
 In Gemfile:
-  gem 'mongoid_follow""
+  gem 'mongoid_follow'
+
+== Legend (to ease complications)
+
+  "follower" is a model who follows
+  "followee" is a model who is being followed
 
 == To use
 
-To make mongoid_follow usable you need to include Mongoid::Followee into your document
-Meanwhile, you also need to include Mongoid::Follower in your follower model:
+To make mongoid_follow usable you need to include Mongoid::Followee into your document who is being followed then you also need to include Mongoid::Follower in your follower model:
 
   class User
     include Mongoid::Document
+
     include Mongoid::Followee
     include Mongoid::Follower
   end
 
   class Group
     include Mongoid::Document
+
     include Mongoid::Followee
   end
 
 You can then follow a model using:
 
-  @bonnie = User.new
-  @bonnie.save
+  @bonnie = User.create
+  @clyde = User.create
 
-  current_user.follow(@clyde)
-  current_user.unfollow?(@clyde)
+  @bonnie.follow(@clyde)
+  @bonnie.unfollow(@clyde)
 
-You can also see whether a model is a follower of another model or a model is a followee of another model:
+You can also see whether a model is a follower of another model or if a model is a followee of another model:
 
-    current_user.follower?(@clyde)
-    current_user.followee?(@clyde)
+  @clyde.follower?(@bonnie)
+  @bonnie.followee?(@clyde)
 
-Of course, you can get a list of followers/followees:
+You can also be a follower of other models
 
-    @clyde.followers
-    @bonnie.followees
+  @gang = Group.create
+  @bonnie.follow(@group)
 
-* Any bug or issue, please send me an email: aeguintu@gmail.com
+  @gang.follower?(@bonnie)
+  @bonnie.follows?(@gang)
+
+# Of course, you can get a list of followers/followees:
+#
+#     @clyde.followers
+#     @bonnie.followees
+
+* Any bug or issue, please send me an email to aeguintu@gmail.com
+
+== For development
+
+  gem install 'mongoid'
+  gem install 'bson_ext'
+  gem install 'database_cleaner'
+  gem install 'rspec'
+
+  rake spec/specs/follow_spec_rb
 
 == TODO
 
@@ -51,7 +74,7 @@ Of course, you can get a list of followers/followees:
 
 == Thanks
 
-Thanks the mongoid_followable for 
+Thanks the mongoid_followable for
 
 == Copyright
 

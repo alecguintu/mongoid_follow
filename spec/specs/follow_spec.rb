@@ -5,17 +5,11 @@ describe Mongoid::Follower do
   describe User do
 
     before do
-      @bonnie = User.new
-      @bonnie.save
+      @bonnie = User.create
+      @clyde = User.create
+      @alec = User.create
 
-      @clyde = User.new
-      @clyde.save
-
-      @alec = User.new
-      @alec.save
-
-      @gang = Group.new
-      @gang.save
+      @gang = Group.create
     end
 
     it "should have no follows or followers" do
