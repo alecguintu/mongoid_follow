@@ -1,0 +1,58 @@
+= Follow stuff for Mongoid
+
+== Installation
+
+In Gemfile:
+  gem 'mongoid_follow""
+
+== To use
+
+To make mongoid_follow usable you need to include Mongoid::Followee into your document
+Meanwhile, you also need to include Mongoid::Follower in your follower model:
+
+  class User
+    include Mongoid::Document
+    include Mongoid::Followee
+    include Mongoid::Follower
+  end
+
+  class Group
+    include Mongoid::Document
+    include Mongoid::Followee
+  end
+
+You can then follow a model using:
+
+  @bonnie = User.new
+  @bonnie.save
+
+  current_user.follow(@clyde)
+  current_user.unfollow?(@clyde)
+
+You can also see whether a model is a follower of another model or a model is a followee of another model:
+
+    current_user.follower?(@clyde)
+    current_user.followee?(@clyde)
+
+Of course, you can get a list of followers/followees:
+
+    @clyde.followers
+    @bonnie.followees
+
+* Any bug or issue, please send me an email: aeguintu@gmail.com
+
+== TODO
+
+* finish up todo's
+* count of followers/followees
+* common followers (or maybe followees)
+* maybe... (un)authorization of who can follow (model)
+* most/least followed/following #FINISHED
+
+== Thanks
+
+Thanks the mongoid_followable for 
+
+== Copyright
+
+Copyright (c) Alec Guintu. See LICENSE.txt for further details.
