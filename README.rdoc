@@ -8,11 +8,11 @@ In Gemfile:
 == Legend (to ease complications)
 
   "follower" is a model who follows
-  "followee" is a model who is being followed
+  "followee" is a model who would be followed
 
 == To use
 
-To make mongoid_follow usable you need to include Mongoid::Followee into your document who is being followed then you also need to include Mongoid::Follower in your follower model:
+To make mongoid_follow usable you need to include Mongoid::Followee into your document who would be followed then you also need to include Mongoid::Follower in your follower model:
 
   class User
     include Mongoid::Document
@@ -48,11 +48,6 @@ You can also be a follower of other models
   @gang.follower?(@bonnie)
   @bonnie.follows?(@gang)
 
-# Of course, you can get a list of followers/followees:
-#
-#     @clyde.followers
-#     @bonnie.followees
-
 * Any bug or issue, please send me an email to aeguintu@gmail.com
 
 == For development
@@ -67,14 +62,13 @@ You can also be a follower of other models
 == TODO
 
 * finish up todo's
-* count of followers/followees
+* count of followers/followees ==FINISHED
 * common followers (or maybe followees)
 * maybe... (un)authorization of who can follow (model)
-* most/least followed/following #FINISHED
 
 == Thanks
 
-Thanks the mongoid_followable for
+Super thanks for the mongoid_followable for the tutorial of how to make gems
 
 == Copyright
 

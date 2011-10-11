@@ -46,5 +46,26 @@ describe Mongoid::Follower do
       @bonnie.follows?(@gang).should be_true
       @gang.follower?(@bonnie).should be_true
     end
+
+    it "should increment / decrement counters" do
+      @clyde.followers_count.should == 0
+
+      @bonnie.follow(@clyde)
+
+      @bonnie.followees_count.should == 1
+      @clyde.followers_count.should == 1
+
+      @alec.follow(@clyde)
+      @clyde.followers_count.should == 2
+      @bonnie.followers_count.should == 0
+
+      @alec.unfollow(@clyde)
+      @alec.followees_count.should == 0
+      @clyde.followers_count.should == 1
+
+      @bonnie.unfollow(@clyde)
+      @bonnie.followees_count.should == 0
+      @clyde.followers_count.should == 0
+    end
   end
 end
