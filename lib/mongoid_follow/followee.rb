@@ -28,10 +28,11 @@ module Mongoid
     # view all selfs followers
     #
     # Example:
-    # >> @clyde.follower?(@bonnie)
-    # => true
-    def followers(model)
-      #TODO
+    # >> @clyde.all_followers
+    def all_followers
+      self.followers.collect do |f|
+        f.ff_type.constantize.find(f.ff_id)
+      end
     end
   end
 end

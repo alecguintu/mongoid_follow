@@ -52,9 +52,11 @@ module Mongoid
     # view all selfs followees
     #
     # Example:
-    # >> @alec.followees
-    def followees(model)
-      # TODO
+    # >> @alec.all_followees
+    def all_followees
+      self.followees.collect do |f|
+        f.ff_type.constantize.find(f.ff_id)
+      end
     end
   end
 end

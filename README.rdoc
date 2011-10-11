@@ -64,7 +64,6 @@ You can also be a follower of other models
 * finish up todo's
 * count of followers/followees ==FINISHED
 * common followers (or maybe followees)
-* maybe... (un)authorization of who can follow (model)
 
 == Thanks
 

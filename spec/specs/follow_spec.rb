@@ -5,11 +5,11 @@ describe Mongoid::Follower do
   describe User do
 
     before do
-      @bonnie = User.create
-      @clyde = User.create
-      @alec = User.create
+      @bonnie = User.create(:name => 'Bonnie')
+      @clyde = User.create(:name => 'Clyde')
+      @alec = User.create(:name => 'Alec')
 
-      @gang = Group.create
+      @gang = Group.create(:name => 'Gang')
     end
 
     it "should have no follows or followers" do
@@ -66,6 +66,27 @@ describe Mongoid::Follower do
       @bonnie.unfollow(@clyde)
       @bonnie.followees_count.should == 0
       @clyde.followers_count.should == 0
+    end
+
+    it "should list all followers" do
+      @bonnie.follow(@clyde)
+
+      @clyde.all_followers.should == [@bonnie]
+    end
+
+    it "should list all two followers" do
+      @bonnie.follow(@clyde)
+      @alec.follow(@clyde)
+
+      @clyde.all_followers.should == [@bonnie, @alec]
+    end
+    
+    it "this has a friggin error" do
+      @bonnie.follow(@clyde)
+      @clyde.all_followers # get list
+
+      @alec.follow(@clyde)
+      @clyde.all_followers.should == [@bonnie, @alec]
     end
   end
 end
