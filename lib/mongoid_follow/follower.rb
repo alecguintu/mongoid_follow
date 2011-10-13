@@ -53,8 +53,26 @@ module Mongoid
     #
     # Example:
     # >> @alec.all_followees
+    # => [@bonnie]
     def all_followees
-      self.followees.collect do |f|
+      get_followees_of(self)
+    end
+
+    # view all common followees of self against model
+    #
+    # Example:
+    # >> @clyde.common_followees_with(@gang)
+    # => [@bonnie, @alec]
+    def common_followees_with(model)
+      model_followees = get_followees_of(model)
+      self_followees = get_followees_of(self)
+
+      self_followees & model_followees
+    end
+
+    private
+    def get_followees_of(me)
+      me.followees.collect do |f|
         f.ff_type.constantize.find(f.ff_id)
       end
     end

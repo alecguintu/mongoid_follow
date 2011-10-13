@@ -76,12 +76,36 @@ describe Mongoid::Follower do
       @clyde.all_followers.should == [@bonnie, @alec]
     end
 
-    it "should have one followee" do
+    it "should list all followee" do
       @bonnie.follow(@clyde)
       # @bonnie.all_followees.should == [@clyde] # spec has an error on last #all_followees when this is called
 
       @bonnie.follow(@gang)
       @bonnie.all_followees.should == [@clyde, @gang]
+    end
+
+    it "should have common followers" do
+      @bonnie.follow(@clyde)
+      @bonnie.follow(@gang)
+
+      @gang.common_followers_with(@clyde).should == [@bonnie]
+
+      @alec.follow(@clyde)
+      @alec.follow(@gang)
+
+      @clyde.common_followers_with(@gang).should == [@bonnie, @alec]
+    end
+
+    it "should have common followees" do
+      @bonnie.follow(@gang)
+      @alec.follow(@gang)
+
+      @alec.common_followees_with(@bonnie).should == [@gang]
+
+      @bonnie.follow(@clyde)
+      @alec.follow(@clyde)
+
+      @bonnie.common_followees_with(@alec).should == [@gang, @clyde]
     end
   end
 end

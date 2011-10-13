@@ -63,7 +63,7 @@ You can also be a follower of other models
 
 * finish up todo's (list of followers and followees) ==FINISHED
 * count of followers/followees ==FINISHED
-* common followers (or maybe followees)
+* common followers (or maybe followees) ==FINISHED
 
 == Thanks
 
