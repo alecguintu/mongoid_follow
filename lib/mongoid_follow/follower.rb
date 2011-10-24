@@ -12,11 +12,15 @@ module Mongoid
     # Example:
     # >> @bonnie.follow(@clyde)
     def follow(model)
-      model.followers.create!(:ff_type => self.class.name, :ff_id => self.id)
-      model.inc(:fferc, 1)
+      if self.id != model.id && !self.follows?(model)
+        model.followers.create!(:ff_type => self.class.name, :ff_id => self.id)
+        model.inc(:fferc, 1)
 
-      self.followees.create!(:ff_type => model.class.name, :ff_id => model.id)
-      self.inc(:ffeec, 1)
+        self.followees.create!(:ff_type => model.class.name, :ff_id => model.id)
+        self.inc(:ffeec, 1)
+      else
+        return false
+      end
     end
 
     # unfollow a model
@@ -24,11 +28,15 @@ module Mongoid
     # Example:
     # >> @bonnie.unfollow(@clyde)
     def unfollow(model)
-      model.followers.where(:ff_type => self.class.name, :ff_id => self.id).destroy
-      model.inc(:fferc, -1)
+      if self.id != model.id && self.follows?(model)
+        model.followers.where(:ff_type => self.class.name, :ff_id => self.id).destroy
+        model.inc(:fferc, -1)
 
-      self.followees.where(:ff_type => model.class.name, :ff_id => model.id).destroy
-      self.inc(:ffeec, -1)
+        self.followees.where(:ff_type => model.class.name, :ff_id => model.id).destroy
+        self.inc(:ffeec, -1)
+      else
+        return false
+      end
     end
 
     # know if self is already following model

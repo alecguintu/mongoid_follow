@@ -27,6 +27,16 @@ describe Mongoid::Follower do
       @clyde.follower?(@bonnie).should be_true
     end
 
+    it "should decline to follow self" do
+      @bonnie.follow(@bonnie).should be_false
+    end
+
+    it "should decline two follows" do
+      @bonnie.follow(@clyde)
+
+      @bonnie.follow(@clyde).should be_false
+    end
+
     it "can unfollow another User" do
       @bonnie.follows?(@clyde).should be_false
       @clyde.follower?(@bonnie).should be_false
@@ -38,6 +48,14 @@ describe Mongoid::Follower do
       @bonnie.unfollow(@clyde)
       @bonnie.follows?(@clyde).should be_false
       @clyde.follower?(@bonnie).should be_false
+    end
+
+    it "should decline unfollow of non-followed User" do
+      @bonnie.unfollow(@clyde).should be_false
+    end
+
+    it "should decline unfollow of self" do
+      @bonnie.unfollow(@bonnie).should be_false
     end
 
     it "can follow a group" do
