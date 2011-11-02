@@ -1,4 +1,4 @@
-= Follow stuff for Rails3 with Mongoid
+= Follow feature for Rails3 with Mongoid
 
 == Installation
 
