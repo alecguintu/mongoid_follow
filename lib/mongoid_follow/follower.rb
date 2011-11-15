@@ -13,11 +13,17 @@ module Mongoid
     # >> @bonnie.follow(@clyde)
     def follow(model)
       if self.id != model.id && !self.follows?(model)
+
+        model.before_followed if model.respond_to?('before_followed')
         model.followers.create!(:ff_type => self.class.name, :ff_id => self.id)
         model.inc(:fferc, 1)
+        model.after_followed if model.respond_to?('after_followed')
 
+        self.before_follow if self.respond_to?('before_follow')
         self.followees.create!(:ff_type => model.class.name, :ff_id => model.id)
         self.inc(:ffeec, 1)
+        self.after_follow if self.respond_to?('after_follow')
+
       else
         return false
       end
@@ -29,11 +35,17 @@ module Mongoid
     # >> @bonnie.unfollow(@clyde)
     def unfollow(model)
       if self.id != model.id && self.follows?(model)
+
+        model.before_unfollowed if model.respond_to?('before_unfollowed')
         model.followers.where(:ff_type => self.class.name, :ff_id => self.id).destroy
         model.inc(:fferc, -1)
+        model.after_unfollowed if model.respond_to?('after_unfollowed')
 
+        self.before_unfollow if self.respond_to?('before_unfollow')
         self.followees.where(:ff_type => model.class.name, :ff_id => model.id).destroy
         self.inc(:ffeec, -1)
+        self.after_unfollow if self.respond_to?('after_unfollow')
+
       else
         return false
       end
