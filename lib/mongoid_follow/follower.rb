@@ -14,10 +14,10 @@ module Mongoid
     def follow(model)
       if self.id != model.id && !self.follows?(model)
 
-        model.before_followed_by(self) if model.respond_to?('before_followed')
+        model.before_followed_by(self) if model.respond_to?('before_followed_by')
         model.followers.create!(:ff_type => self.class.name, :ff_id => self.id)
         model.inc(:fferc, 1)
-        model.after_followed_by(self) if model.respond_to?('after_followed')
+        model.after_followed_by(self) if model.respond_to?('after_followed_by')
 
         self.before_follow(model) if self.respond_to?('before_follow')
         self.followees.create!(:ff_type => model.class.name, :ff_id => model.id)
@@ -36,10 +36,10 @@ module Mongoid
     def unfollow(model)
       if self.id != model.id && self.follows?(model)
 
-        model.before_unfollowed_by(self) if model.respond_to?('before_unfollowed')
+        model.before_unfollowed_by(self) if model.respond_to?('before_unfollowed_by')
         model.followers.where(:ff_type => self.class.name, :ff_id => self.id).destroy
         model.inc(:fferc, -1)
-        model.after_unfollowed_by(self) if model.respond_to?('after_unfollowed')
+        model.after_unfollowed_by(self) if model.respond_to?('after_unfollowed_by')
 
         self.before_unfollow(model) if self.respond_to?('before_unfollow')
         self.followees.where(:ff_type => model.class.name, :ff_id => model.id).destroy

@@ -48,6 +48,33 @@ You can also be a follower of other models
   @gang.follower?(@bonnie)
   @bonnie.follows?(@gang)
 
+== Callbacks
+
+You can attach callbacks to the follower/followee models before or after the follow.
+
+  # Follower model
+  def before_follow(followee)
+    puts 'Notify me'
+  end
+
+  # Other follower callbacks
+  after_follow
+  before_unfollow
+  after_unfollow
+
+
+  # Followee model
+  def before_followed_by(follower)
+    puts 'Something here'
+  end
+
+  # Other followee callbacks
+  after_followed_by
+  before_unfollowed_by
+  after_unfollowed_by
+
+* Note: careful with using callbacks, we have no transaction so if breaks on your callbacks, what gets saved is saved.
+
 * Any bug or issue, please send me an email to aeguintu@gmail.com
 
 == For development

@@ -9,6 +9,10 @@ class User
     # after follower follows
   end
 
+  def after_followed_by(follower)
+    # after followee is followed
+  end
+
   def after_unfollowed_by(followee)
     # after follower unfollows
   end
