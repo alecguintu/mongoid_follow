@@ -126,6 +126,7 @@ describe Mongoid::Follower do
       @bonnie.common_followees_with(@alec).should == [@gang, @clyde]
     end
 
+    # Duh... this is a useless spec... Hrmn...
     it "should respond on callbacks" do
       @bonnie.respond_to?('after_follow').should be_true
       @bonnie.respond_to?('after_unfollowed').should be_true

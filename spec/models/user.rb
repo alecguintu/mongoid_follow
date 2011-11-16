@@ -5,11 +5,11 @@ class User
 
   field :name
 
-  def after_follow
+  def after_follow(followee)
     # after follower follows
   end
 
-  def after_unfollowed
+  def after_unfollowed_by(followee)
     # after follower unfollows
   end
 end

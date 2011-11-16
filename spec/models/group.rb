@@ -4,11 +4,11 @@ class Group
 
   field :name
 
-  def before_followed
+  def before_followed_by(follower)
     # before followee is followed
   end
 
-  def before_unfollowed
+  def before_unfollowed_by(follower)
     # before followee is unfollowed
   end
 end
