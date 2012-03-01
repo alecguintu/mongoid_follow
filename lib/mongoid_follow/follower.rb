@@ -10,7 +10,7 @@ module Mongoid
     # follow a model
     #
     # Example:
-    # >> @bonnie.follow(@clyde)
+    # => @bonnie.follow(@clyde)
     def follow(model)
       if self.id != model.id && !self.follows?(model)
 
@@ -32,7 +32,7 @@ module Mongoid
     # unfollow a model
     #
     # Example:
-    # >> @bonnie.unfollow(@clyde)
+    # => @bonnie.unfollow(@clyde)
     def unfollow(model)
       if self.id != model.id && self.follows?(model)
 
@@ -54,7 +54,7 @@ module Mongoid
     # know if self is already following model
     #
     # Example:
-    # >> @bonnie.follows?(@clyde)
+    # => @bonnie.follows?(@clyde)
     # => true
     def follows?(model)
       0 < self.followees.find(:all, conditions: {ff_id: model.id}).limit(1).count
@@ -64,7 +64,7 @@ module Mongoid
     # Note: this is a cache counter
     #
     # Example:
-    # >> @bonnie.followees_count
+    # => @bonnie.followees_count
     # => 1
     def followees_count
       self.ffeec
@@ -73,7 +73,7 @@ module Mongoid
     # get followees count by model
     #
     # Example:
-    # >> @bonnie.followees_count_by_model(User)
+    # => @bonnie.followees_count_by_model(User)
     # => 1
     def followees_count_by_model(model)
       self.followees.where(:ff_type => model.to_s).count
@@ -82,7 +82,7 @@ module Mongoid
     # view all selfs followees
     #
     # Example:
-    # >> @alec.all_followees
+    # => @alec.all_followees
     # => [@bonnie]
     def all_followees
       get_followees_of(self)
@@ -91,7 +91,7 @@ module Mongoid
     # view all selfs followees by model
     #
     # Example:
-    # >> @clyde.all_followees_by_model
+    # => @clyde.all_followees_by_model
     # => [@bonnie]
     def all_followees_by_model(model)
       get_followees_of(self, model)
@@ -100,7 +100,7 @@ module Mongoid
     # view all common followees of self against model
     #
     # Example:
-    # >> @clyde.common_followees_with(@gang)
+    # => @clyde.common_followees_with(@gang)
     # => [@bonnie, @alec]
     def common_followees_with(model)
       model_followees = get_followees_of(model)

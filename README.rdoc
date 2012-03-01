@@ -48,6 +48,16 @@ You can also be a follower of other models
   @gang.follower?(@bonnie)
   @bonnie.follows?(@gang)
 
+Get all followers / followees by
+
+  @gang.all_followers
+  @bonnie.all_followees
+
+You can also get followers by a certain model
+
+  @gang.all_followers_by_model(User)
+  @bonnie.all_followees_by_model(Gang)
+
 == Callbacks
 
 You can attach callbacks to the follower/followee models before or after the follow.
@@ -73,7 +83,7 @@ You can attach callbacks to the follower/followee models before or after the fol
   before_unfollowed_by
   after_unfollowed_by
 
-Note: careful with using callbacks, we have no transaction so it if breaks on your callbacks, what gets saved is saved.
+Note: careful with using callbacks, we have no transaction so if it breaks on your callbacks, what gets saved is saved.
 
 * Any bug or issue, please send me an email to aeguintu@gmail.com
 
@@ -88,15 +98,13 @@ Note: careful with using callbacks, we have no transaction so it if breaks on yo
 
 == TODO
 
-* finish up todo's (list of followers and followees) ==FINISHED
-* count of followers/followees ==FINISHED
-* common followers (or maybe followees) ==FINISHED
+* limit result of followers/followees
 
 == Thanks
 
-Super thanks:
-to mongoid_followable.
-to Tristan Peralta.
+Awesome thanks to:
+  to mongoid_followable
+  to Tristan Peralta
 
 == Copyright
 

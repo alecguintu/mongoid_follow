@@ -10,17 +10,17 @@ module Mongoid
     # know if self is followed by model
     #
     # Example:
-    # >> @clyde.follower?(@bonnie)
+    # => @clyde.follower?(@bonnie)
     # => true
     def follower?(model)
       0 < self.followers.find(:all, conditions: {ff_id: model.id}).limit(1).count
     end
 
-    # get followees count
+    # get followers count
     # Note: this is a cache counter
     #
     # Example:
-    # >> @bonnie.followers_count
+    # => @bonnie.followers_count
     # => 1
     def followers_count
       self.fferc
@@ -29,7 +29,7 @@ module Mongoid
     # get followers count by model
     #
     # Example:
-    # >> @bonnie.followers_count_by_model(User)
+    # => @bonnie.followers_count_by_model(User)
     # => 1
     def followers_count_by_model(model)
       self.followers.where(:ff_type => model.to_s).count
@@ -38,7 +38,7 @@ module Mongoid
     # view all selfs followers
     #
     # Example:
-    # >> @clyde.all_followers
+    # => @clyde.all_followers
     # => [@bonnie, @alec]
     def all_followers
       get_followers_of(self)
@@ -47,7 +47,7 @@ module Mongoid
     # view all selfs followers by model
     #
     # Example:
-    # >> @clyde.all_followers_by_model
+    # => @clyde.all_followers_by_model
     # => [@bonnie]
     def all_followers_by_model(model)
       get_followers_of(self, model)
@@ -56,7 +56,7 @@ module Mongoid
     # view all common followers of self against model
     #
     # Example:
-    # >> @clyde.common_followers_with(@gang)
+    # => @clyde.common_followers_with(@gang)
     # => [@bonnie, @alec]
     def common_followers_with(model)
       model_followers = get_followers_of(model)
