@@ -17,12 +17,22 @@ module Mongoid
     end
 
     # get followees count
+    # Note: this is a cache counter
     #
     # Example:
-    # >> @bonnie.followees_count
+    # >> @bonnie.followers_count
     # => 1
     def followers_count
       self.fferc
+    end
+
+    # get followers count by model
+    #
+    # Example:
+    # >> @bonnie.followers_count_by_model(User)
+    # => 1
+    def followers_count_by_model(model)
+      self.followers.where(:ff_type => model.to_s).count
     end
 
     # view all selfs followers
@@ -50,6 +60,14 @@ module Mongoid
     def get_followers_of(me)
       me.followers.collect do |f|
         f.ff_type.constantize.find(f.ff_id)
+      end
+    end
+
+    def method_missing(missing_method, *args, &block)
+      if missing_method.to_s =~ /^(.+)_followers_count$/
+        followers_count_by_model($1.camelize)
+      else
+        super
       end
     end
   end

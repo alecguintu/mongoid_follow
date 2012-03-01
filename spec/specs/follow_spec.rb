@@ -8,6 +8,7 @@ describe Mongoid::Follower do
       @bonnie = User.create(:name => 'Bonnie')
       @clyde = User.create(:name => 'Clyde')
       @alec = User.create(:name => 'Alec')
+      @just_another_user = OtherUser.create(:name => 'Another User')
 
       @gang = Group.create(:name => 'Gang')
     end
@@ -65,25 +66,60 @@ describe Mongoid::Follower do
       @gang.follower?(@bonnie).should be_true
     end
 
-    it "should increment / decrement counters" do
-      @clyde.followers_count.should == 0
+    describe "counting stuff" do
+      it "should increment / decrement cache counters" do
+        @clyde.followers_count.should == 0
 
-      @bonnie.follow(@clyde)
+        @bonnie.follow(@clyde)
+        @bonnie.followees_count.should == 1
+        @clyde.followers_count.should == 1
 
-      @bonnie.followees_count.should == 1
-      @clyde.followers_count.should == 1
+        @alec.follow(@clyde)
+        @clyde.followers_count.should == 2
+        @bonnie.followers_count.should == 0
 
-      @alec.follow(@clyde)
-      @clyde.followers_count.should == 2
-      @bonnie.followers_count.should == 0
+        @alec.unfollow(@clyde)
+        @alec.followees_count.should == 0
+        @clyde.followers_count.should == 1
 
-      @alec.unfollow(@clyde)
-      @alec.followees_count.should == 0
-      @clyde.followers_count.should == 1
+        @bonnie.unfollow(@clyde)
+        @bonnie.followees_count.should == 0
+        @clyde.followers_count.should == 0
+      end
 
-      @bonnie.unfollow(@clyde)
-      @bonnie.followees_count.should == 0
-      @clyde.followers_count.should == 0
+      it "should allow to count followees by model" do
+        @alec.follow(@gang)
+        @alec.followees_count.should == 1
+        @alec.followees_count_by_model(Group).should == 1
+
+        @alec.follow(@clyde)
+        @alec.followees_count.should == 2
+        @alec.followees_count_by_model(Group).should == 1
+      end
+
+      it "should also allow to count followees by model with dynamic method" do
+        @alec.follow(@gang)
+        @alec.follow(@clyde)
+
+        @alec.group_followees_count.should == 1
+      end
+
+      it "should allow to count followers by model" do
+        @just_another_user.follow(@gang)
+        @gang.followers_count.should == 1
+        @gang.followers_count_by_model(OtherUser).should == 1
+
+        @alec.follow(@gang)
+        @gang.followers_count.should == 2
+        @gang.followers_count_by_model(OtherUser).should == 1
+      end
+
+      it "should also allow to count followers by model with dynamic method" do
+        @just_another_user.follow(@gang)
+        @alec.follow(@gang)
+
+        @gang.user_followers_count.should == 1
+      end
     end
 
     it "should list all followers" do
