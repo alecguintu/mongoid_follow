@@ -48,15 +48,39 @@ You can also be a follower of other models
   @gang.follower?(@bonnie)
   @bonnie.follows?(@gang)
 
-Get all followers / followees by
+=== Getting followers/followees
+
+Get all followers/followees by
 
   @gang.all_followers
   @bonnie.all_followees
 
-You can also get followers by a certain model
+You can also get followers/followees by a certain model
 
   @gang.all_followers_by_model(User)
   @bonnie.all_followees_by_model(Gang)
+
+=== Counting followers/followees
+
+Get the count of followers/followees using
+
+  @gang.followers_count
+  @bonnie.followees_count
+
+Or by a certain model by
+
+  @gang.followers_count_by_model(User)
+  @bonnie.followees_count_by_model(User)
+
+=== Dynamic methods
+
+You can use dynamic methods to shorten code for getting followers/followees or their count of a certain model by
+
+  @gang.all_user_followers
+  @bonnie.all_gang_followees
+
+  @gang.user_followers_count
+  @bonnie.user_followees_count
 
 == Callbacks
 
