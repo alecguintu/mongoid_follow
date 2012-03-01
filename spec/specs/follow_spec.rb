@@ -122,54 +122,89 @@ describe Mongoid::Follower do
       end
     end
 
-    it "should list all followers" do
-      @bonnie.follow(@clyde)
-      # @clyde.all_followers.should == [@bonnie] # spec has an error on last #all_followers when this is called
+    describe "listing stuff" do
+      it "should list all followers" do
+        @bonnie.follow(@clyde)
+        # @clyde.all_followers.should == [@bonnie] # spec has an error on last #all_followers when this is called
 
-      @alec.follow(@clyde)
-      @clyde.all_followers.should == [@bonnie, @alec]
+        @alec.follow(@clyde)
+        @clyde.all_followers.should == [@bonnie, @alec]
+      end
+
+      it "should list all followers by model" do
+        @bonnie.follow(@gang)
+        @just_another_user.follow(@gang)
+
+        @gang.all_followers.should == [@bonnie, @just_another_user]
+        @gang.all_followers_by_model(User).should == [@bonnie]
+      end
+
+      it "should list all followers by model with dynamic method" do
+        @bonnie.follow(@gang)
+        @just_another_user.follow(@gang)
+
+        @gang.all_user_followers(User).should == [@bonnie]
+      end
+
+      it "should list all followees" do
+        @bonnie.follow(@clyde)
+        # @bonnie.all_followees.should == [@clyde] # spec has an error on last #all_followees when this is called
+
+        @bonnie.follow(@gang)
+        @bonnie.all_followees.should == [@clyde, @gang]
+      end
+
+      it "should list all followees by model" do
+        @bonnie.follow(@gang)
+        @bonnie.follow(@clyde)
+
+        @bonnie.all_followees.should == [@gang, @clyde]
+        @bonnie.all_followees_by_model(User).should == [@clyde]
+      end
+
+      it "should list all followees by model with dynamic method" do
+        @bonnie.follow(@gang)
+        @bonnie.follow(@clyde)
+
+        @bonnie.all_user_followees.should == [@clyde]
+      end
+
+      it "should have common followers" do
+        @bonnie.follow(@clyde)
+        @bonnie.follow(@gang)
+
+        @gang.common_followers_with(@clyde).should == [@bonnie]
+
+        @alec.follow(@clyde)
+        @alec.follow(@gang)
+
+        @clyde.common_followers_with(@gang).should == [@bonnie, @alec]
+      end
+
+      it "should have common followees" do
+        @bonnie.follow(@gang)
+        @alec.follow(@gang)
+
+        @alec.common_followees_with(@bonnie).should == [@gang]
+
+        @bonnie.follow(@clyde)
+        @alec.follow(@clyde)
+
+        @bonnie.common_followees_with(@alec).should == [@gang, @clyde]
+      end
     end
 
-    it "should list all followee" do
-      @bonnie.follow(@clyde)
-      # @bonnie.all_followees.should == [@clyde] # spec has an error on last #all_followees when this is called
+    describe "callback stuff" do
+      # Duh... this is a useless spec... Hrmn...
+      it "should respond on callbacks" do
+        @bonnie.respond_to?('after_follow').should be_true
+        @bonnie.respond_to?('after_unfollowed_by').should be_true
+        @bonnie.respond_to?('before_follow').should be_false
 
-      @bonnie.follow(@gang)
-      @bonnie.all_followees.should == [@clyde, @gang]
+        @gang.respond_to?('before_followed_by').should be_true
+        @gang.respond_to?('after_followed_by').should be_false
+      end
     end
 
-    it "should have common followers" do
-      @bonnie.follow(@clyde)
-      @bonnie.follow(@gang)
-
-      @gang.common_followers_with(@clyde).should == [@bonnie]
-
-      @alec.follow(@clyde)
-      @alec.follow(@gang)
-
-      @clyde.common_followers_with(@gang).should == [@bonnie, @alec]
-    end
-
-    it "should have common followees" do
-      @bonnie.follow(@gang)
-      @alec.follow(@gang)
-
-      @alec.common_followees_with(@bonnie).should == [@gang]
-
-      @bonnie.follow(@clyde)
-      @alec.follow(@clyde)
-
-      @bonnie.common_followees_with(@alec).should == [@gang, @clyde]
-    end
-
-    # Duh... this is a useless spec... Hrmn...
-    it "should respond on callbacks" do
-      @bonnie.respond_to?('after_follow').should be_true
-      @bonnie.respond_to?('after_unfollowed_by').should be_true
-      @bonnie.respond_to?('before_follow').should be_false
-
-      @gang.respond_to?('before_followed_by').should be_true
-      @gang.respond_to?('after_followed_by').should be_false
-    end
   end
 end

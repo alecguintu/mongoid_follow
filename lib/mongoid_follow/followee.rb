@@ -44,6 +44,15 @@ module Mongoid
       get_followers_of(self)
     end
 
+    # view all selfs followers by model
+    #
+    # Example:
+    # >> @clyde.all_followers_by_model
+    # => [@bonnie]
+    def all_followers_by_model(model)
+      get_followers_of(self, model)
+    end
+
     # view all common followers of self against model
     #
     # Example:
@@ -57,8 +66,10 @@ module Mongoid
     end
 
     private
-    def get_followers_of(me)
-      me.followers.collect do |f|
+    def get_followers_of(me, model = nil)
+      followers = !model ? me.followers : me.followers.where(:ff_type => model.to_s)
+
+      followers.collect do |f|
         f.ff_type.constantize.find(f.ff_id)
       end
     end
@@ -66,6 +77,8 @@ module Mongoid
     def method_missing(missing_method, *args, &block)
       if missing_method.to_s =~ /^(.+)_followers_count$/
         followers_count_by_model($1.camelize)
+      elsif missing_method.to_s =~ /^all_(.+)_followers$/
+        all_followers_by_model($1.camelize)
       else
         super
       end
