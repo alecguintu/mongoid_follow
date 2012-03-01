@@ -127,8 +127,8 @@ Note: careful with using callbacks, we have no transaction so if it breaks on yo
 == Thanks
 
 Awesome thanks to:
-  to mongoid_followable
-  to Tristan Peralta
+  mongoid_followable
+  Tristan Peralta
 
 == Copyright
 
