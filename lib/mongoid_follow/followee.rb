@@ -13,7 +13,7 @@ module Mongoid
     # => @clyde.follower?(@bonnie)
     # => true
     def follower?(model)
-      0 < self.followers.find(:all, conditions: {ff_id: model.id}).limit(1).count
+      0 < self.followers.where(ff_id: model.id).limit(1).count
     end
 
     # get followers count
